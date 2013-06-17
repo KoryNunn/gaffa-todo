@@ -1,0 +1,23 @@
+{
+    "name": "gaffa-todo",
+    "description": "TODO MVC written in Gaffa",
+    "author": "Kory Nunn <knunn187@gmail.com>",
+    "tags": [
+        "DOM",
+        "ToDo"
+    ],
+    "version": "0.0.1",
+    "main": "scripts/app.js",
+    "dependencies": {
+        "gaffa":">= 0.7.2"
+    },
+    "devDependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/KoryNunn/gaffa-todo.git"
+    },
+    "bugs": {
+        "url": "http://github.com/KoryNunn/gaffa-todo/issues"
+    },
+    "contributors": []
+}
