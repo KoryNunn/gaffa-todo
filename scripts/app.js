@@ -101,14 +101,13 @@ function createTodoTemplate(){
 }
 
 // returns a list of all todos that match the current filter.
-var todosInViewBinding = '(? (= [/filter] "all") [] (? (= [/filter] "completed") (filter [] {todo todo.completed}) (filter [] {todo (! todo.completed)})))';
+var todosInViewBinding = '(? (= [/filter] "all") [/todos] (? (= [/filter] "completed") (filter [/todos] {todo todo.completed}) (filter [/todos] {todo (! todo.completed)})))';
 
 function createTodoList(){
 	var todoList = new views.list();
 
 	todoList.tagName = 'ul';
 	todoList.classes.value = 'todoList';
-	todoList.path = '[todos]';
 	todoList.list.binding = todosInViewBinding;
 	todoList.list.template = createTodoTemplate();
 
@@ -118,15 +117,10 @@ function createTodoList(){
 function createMainSection(){
 	var mainSection = new views.container(),
 		toggleAllCheckbox = new views.checkbox(),
-		toggleAll = new actions.forEach(),
-		toggleTo = new actions.set();
+		toggleAll = new actions.set();
 
-	toggleAll.path = '[/todos]'
-	toggleAll.target.binding = todosInViewBinding;
-	toggleAll.actions.forEach = [toggleTo];
-
-	toggleTo.source.binding = '[/toggleAll]';
-	toggleTo.target.binding = '[completed]';
+	toggleAll.source.binding = '[/toggleAll]'
+	toggleAll.target.binding = '(map' + todosInViewBinding + '{todo todo.completed})';
 
 	toggleAllCheckbox.showLabel.value = false;
 	toggleAllCheckbox.checked.binding = '[/toggleAll]';
@@ -153,14 +147,13 @@ function createFooter(){
 		filter = new views.anchor(),
 		activateFilter = new actions.set(),
 		clearCompletedButton = new views.button(),
-		clearCompleted = new actions.set();
+		clearCompleted = new actions.remove();
 
 	// This is kinda lame. Haven't spent the time to make it clean yet.
 	todoCount.html.binding = '({todosLeft (join "" "<strong>" todosLeft "</strong> item" (? (!= todosLeft 1) "s") " left")} (filter [/todos] {todo (! todo.completed)}).length)';
 	todoCount.classes.value = 'todoCount';
 
-	filters.path = '[filters]';
-	filters.list.binding = '[]';
+	filters.list.binding = '[/filters]';
 	filters.list.template = filterContainer;
 	filters.classes.value = 'filters';
 	filters.tagName = 'ul';
@@ -187,8 +180,7 @@ function createFooter(){
 	clearCompletedButton.visible.binding = '(!(!(findOne [] {todo todo.completed})))';
 	clearCompletedButton.actions.click = [clearCompleted];
 
-	clearCompleted.target.binding = '[]';
-	clearCompleted.source.binding = '(filter [] {todo (!todo.completed)})';
+	clearCompleted.target.binding = '(filter [] {todo todo.completed})';
 
 	footer.tagName = 'footer';
 	footer.views.content.add([todoCount, filters, clearCompletedButton]);
