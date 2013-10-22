@@ -9,7 +9,7 @@
     "version": "0.0.1",
     "main": "scripts/app.js",
     "dependencies": {
-        "gaffa":"0.13.x"
+        "gaffa":"0.16.x"
     },
     "devDependencies": {},
     "repository": {
